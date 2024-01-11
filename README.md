@@ -8,7 +8,6 @@ Please note that the Protobuf Decompiler cannot restore comments since they are 
 
 Here's how to use it:
 ```sh
-# read from template code
 protodec helloworld.pb.go
 ```
 
