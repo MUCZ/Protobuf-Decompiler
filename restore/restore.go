@@ -5,15 +5,23 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/mucz/protobuf-decompiler/restore/reader"
 	"google.golang.org/protobuf/proto"
 	descriptorpb "google.golang.org/protobuf/types/descriptorpb"
 )
 
 var (
-	readerMap = map[string]func(string) []byte{
-		".go":  goRawDescReader,
-		".py":  pyDescriptorReader,
-		".txt": txtRawDescReader,
+	readerMap = map[string]func(string) ([]byte, error){
+		".go":   reader.GoDescriptorReader,
+		".py":   reader.PyDescriptorReader,
+		".txt":  reader.TxtRawDescReader,
+		".cc":   reader.CcDescriptorReader,
+		".cpp":  reader.CcDescriptorReader,
+		".c":    reader.CcDescriptorReader,
+		".h":    reader.CcDescriptorReader,
+		".java": reader.JavaDescriptorReader,
+		".rs":   reader.RsDescriptorReader,
+		".cs":   reader.CsDescriptorReader,
 	}
 )
 
@@ -23,9 +31,9 @@ func Do(file string) (string, error) {
 	if !ok {
 		return "", fmt.Errorf("unsupported file extension: %s", fileExtension)
 	}
-	bytes := reader(file)
-	if len(bytes) == 0 {
-		return "", fmt.Errorf("no descriptor found in %s", file)
+	bytes, err := reader(file)
+	if err != nil {
+		return "", err
 	}
 	data, _, err := restoreSingleProtoFile(bytes)
 	if err != nil {

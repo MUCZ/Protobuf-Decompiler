@@ -103,3 +103,9 @@ C#
             "bGxvd29ybGQuSGVsbG9SZXBseSIAMAFCNgobaW8uZ3JwYy5leGFtcGxlcy5o",
             "ZWxsb3dvcmxkQg9IZWxsb1dvcmxkUHJvdG9QAaICA0hMV2IGcHJvdG8z"));
 ```
+
+Rust 
+```rs
+
+// todo: add rust example
+```

@@ -1,4 +1,4 @@
-package restore
+package reader
 
 import (
 	"fmt"
@@ -7,20 +7,23 @@ import (
 	"strconv"
 )
 
-func pyDescriptorReader(filepath string) []byte {
+func PyDescriptorReader(filepath string) ([]byte, error) {
+	if _, err := os.Stat(filepath); os.IsNotExist(err) {
+		return nil, fmt.Errorf("file not found: %s", filepath)
+	}
 	bytes, err := os.ReadFile(filepath)
 	if err != nil {
-		return nil
+		return nil, err
 	}
 	var re = regexp.MustCompile(`AddSerializedFile\(b\'([^)]*)\'\)`)
 	match := re.FindStringSubmatch(string(bytes))
 	if len(match) <= 1 {
-		return nil
+		return nil, fmt.Errorf("no match found")
 	}
-	return stringToHex(match[1])
+	return pyStringToHex(match[1])
 }
 
-func stringToHex(s string) []byte {
+func pyStringToHex(s string) ([]byte, error) {
 	var result []byte
 	i := 0
 	for i < len(s) {
@@ -29,9 +32,8 @@ func stringToHex(s string) []byte {
 			i += len(string(value))
 			s = s[:i] + tail
 		} else {
-			fmt.Println(err)
-			return nil
+			return nil, err
 		}
 	}
-	return result
+	return result, nil
 }
