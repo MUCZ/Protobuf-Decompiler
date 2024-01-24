@@ -1,2 +1,2 @@
 build:
-	go build -o protodec main.go
+	go build -o protobuf-decompiler main.go

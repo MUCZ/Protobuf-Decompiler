@@ -8,7 +8,8 @@ Please note that the Protobuf Decompiler cannot restore comments since they are 
 
 Here's how to use it:
 ```sh
-protodec helloworld.pb.go
+go install github.com/mucz/protobuf-decompiler    
+protobuf-decompiler helloworld.pb.go
 ```
 
 The output should resemble the following:
